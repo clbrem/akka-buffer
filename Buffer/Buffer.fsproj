@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <UserSecretsId>dotnet-Buffer-dd9df4de-3ebe-450f-862a-eb39653859ba</UserSecretsId>
+    </PropertyGroup>
+
+
+    <ItemGroup>
+        <Compile Include="TimeoutCore.fs" />
+        <Compile Include="Actors\DoAThing.fs" />
+        <Compile Include="Actors\Manager.fs" />
+        <Compile Include="Worker.fs"/>
+        <Compile Include="Program.fs"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Akka.FSharp" Version="1.5.38" />
+        <PackageReference Include="Akka.Hosting" Version="1.5.38" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0"/>
+    </ItemGroup>
+</Project>
