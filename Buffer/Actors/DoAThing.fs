@@ -5,17 +5,18 @@ open Buffer.Timeout
 open Akka.FSharp
 open Akka.Actor
 
-type DoAThing =
+type DoAThing =    
     | DoAThing of obj
     | ThingIsDone
     | Stop
+    
+    
 
 module DoAThing =
     let nameOfGuid guid = $"doAThing-{guid.ToString()}" 
     let create timespan =
         fun (mailbox: Actor<DoAThing>) ->
-           let logger = mailbox.Context.GetLogger()
-           do mailbox.Context.SetReceiveTimeout(TimeSpan.FromSeconds(5.0))
+           let logger = mailbox.Context.GetLogger()           
            let rec loop  =
                function
                // We're live! waiting on a thing to be done!

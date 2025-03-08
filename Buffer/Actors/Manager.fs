@@ -14,7 +14,7 @@ module Manager =
     let retrieve (mailbox:Actor<ManagerMessage>) name =
         let a = mailbox.Context.Child(name)
         if a.IsNobody() then
-            TimeSpan.FromMinutes(1.0)
+            TimeSpan.FromSeconds(5.0)
             |> DoAThing.create
             |> spawn mailbox.Context name 
         else
@@ -28,16 +28,18 @@ module Manager =
             let rec loop ( active: Map<Guid, IActorRef> ) =
                 actor {
                     match! mailbox.Receive() with
-                    | Start (InProgress active _) ->
-                        
-                        mailbox.Stash()
-                        return! loop active
+                    | Start (id & InProgress active _) ->
+                        logger.Info("Stashing task {0}", id)
+                        mailbox.Stash()                        
+                        return! loop active                    
                     | Start id ->
                         let child = retrieve mailbox (DoAThing.nameOfGuid id)
+                        logger.Info("Starting task {0}", id)
                         child.Tell(DoAThing (Finished id))                        
                         return! loop (Map.add id (mailbox.Sender()) active)                        
                     | Finished (id & InProgress active sender) ->
                         sender.Tell(onFinished id)
+                        logger.Info("Finishing task {0}", id)
                         mailbox.Unstash()
                         return! loop (active.Remove id)
                     | other -> mailbox.Unhandled(other); return! loop active
