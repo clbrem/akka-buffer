@@ -1,5 +1,6 @@
 namespace Buffer.Actors
 open Akka
+open Akka.Event
 open Akka.Util
 open Akka.FSharp
 open Akka.Actor
@@ -13,24 +14,32 @@ module Manager =
     let retrieve (mailbox:Actor<ManagerMessage>) name =
         let a = mailbox.Context.Child(name)
         if a.IsNobody() then
-            TimeSpan.FromSeconds(5.0)
+            TimeSpan.FromMinutes(1.0)
             |> DoAThing.create
             |> spawn mailbox.Context name 
         else
             a
+    let (|InProgress|_|) (active: Map<Guid, IActorRef>) id =
+        Map.tryFind id active
+        
     let create (onFinished: Guid -> 'msg) =
         fun (mailbox: Actor<ManagerMessage>) ->
-            let rec loop (sender: IActorRef option, active: Set<Guid>) =
+            let logger = mailbox.Context.GetLogger()
+            let rec loop ( active: Map<Guid, IActorRef> ) =
                 actor {
                     match! mailbox.Receive() with
+                    | Start (InProgress active _) ->
+                        
+                        mailbox.Stash()
+                        return! loop active
                     | Start id ->
                         let child = retrieve mailbox (DoAThing.nameOfGuid id)
                         child.Tell(DoAThing (Finished id))                        
-                        return! loop (Some (mailbox.Sender()), active.Add id)
-                    | Finished id ->
-                        match sender with
-                        | Some s -> s.Tell(onFinished id)
-                        | _ -> ()
-                        return! loop (None, active.Remove id)
+                        return! loop (Map.add id (mailbox.Sender()) active)                        
+                    | Finished (id & InProgress active sender) ->
+                        sender.Tell(onFinished id)
+                        mailbox.Unstash()
+                        return! loop (active.Remove id)
+                    | other -> mailbox.Unhandled(other); return! loop active
                 }
-            loop (None, Set.empty)
+            loop Map.empty

@@ -15,7 +15,7 @@ module DoAThing =
     let create timespan =
         fun (mailbox: Actor<DoAThing>) ->
            let logger = mailbox.Context.GetLogger()
-           do mailbox.Context.SetReceiveTimeout(TimeSpan.FromSeconds(20.0))
+           do mailbox.Context.SetReceiveTimeout(TimeSpan.FromSeconds(5.0))
            let rec loop  =
                function
                // We're live! waiting on a thing to be done!
