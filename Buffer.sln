@@ -4,6 +4,13 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Buffer", "Buffer\Buffer.fsp
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Buffer.Test", "Buffer.Test\Buffer.Test.fsproj", "{CA91BB15-2A39-4058-9E37-7609D7B34200}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Buffer.Client", "Buffer.Client\Buffer.Client.fsproj", "{6628B237-D16B-4F94-B761-893FA269218E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Containers", "Containers", "{DECF9E93-9A46-4749-8A47-9D303B381CCC}"
+	ProjectSection(SolutionItems) = preProject
+		Containers\Dockerfile = Containers\Dockerfile
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +25,9 @@ Global
 		{CA91BB15-2A39-4058-9E37-7609D7B34200}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA91BB15-2A39-4058-9E37-7609D7B34200}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA91BB15-2A39-4058-9E37-7609D7B34200}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6628B237-D16B-4F94-B761-893FA269218E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6628B237-D16B-4F94-B761-893FA269218E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6628B237-D16B-4F94-B761-893FA269218E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6628B237-D16B-4F94-B761-893FA269218E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
