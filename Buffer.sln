@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Containers", "Containers", 
 		Containers\Dockerfile = Containers\Dockerfile
 	EndProjectSection
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Buffer.Client.Test", "Buffer.Client.Test\Buffer.Client.Test.fsproj", "{F78E414D-5A47-4B21-951C-F7DBBA32C60B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,5 +31,9 @@ Global
 		{6628B237-D16B-4F94-B761-893FA269218E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6628B237-D16B-4F94-B761-893FA269218E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6628B237-D16B-4F94-B761-893FA269218E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F78E414D-5A47-4B21-951C-F7DBBA32C60B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F78E414D-5A47-4B21-951C-F7DBBA32C60B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F78E414D-5A47-4B21-951C-F7DBBA32C60B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F78E414D-5A47-4B21-951C-F7DBBA32C60B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
