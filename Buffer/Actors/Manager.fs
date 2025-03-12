@@ -10,6 +10,8 @@ type ManagerMessage =
     | Start of Guid
     | Finished of Guid
 
+type Manager = private Manager of unit 
+
 module Manager =
     let retrieve (mailbox:Actor<ManagerMessage>) name =
         let a = mailbox.Context.Child(name)
