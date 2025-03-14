@@ -7,6 +7,6 @@ module HandlerTest =
     let ``Can Send a Message`` () =        
         task {
             let factory = RabbitMQ.Client.ConnectionFactory(HostName="localhost")
-            do! Handlers.sendMessage factory 
+            do! Handlers.sendMessage factory "hello"
             }
 

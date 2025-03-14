@@ -1,6 +1,6 @@
 namespace Buffer
 
-open System
+
 open Akka.FSharp
 open Akka.Hosting
 open Buffer.Actors
@@ -12,7 +12,7 @@ module Program =
     let addAkka (akkaBuilder: AkkaConfigurationBuilder)  =
         akkaBuilder.WithActors(
             fun system registry resolver ->                
-                let actor = spawn system "word-counter-manager" (Manager.create (fun _ ->()) )
+                let actor = spawn system "word-counter-manager" (Manager.create (fun _ -> "All Done!") )
                 registry.Register<Manager>(actor) 
             ) |> ignore
     let addServices (services: IServiceCollection) =
