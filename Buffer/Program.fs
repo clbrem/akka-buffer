@@ -12,7 +12,7 @@ module Program =
     let addAkka (akkaBuilder: AkkaConfigurationBuilder)  =
         akkaBuilder.WithActors(
             fun system registry resolver ->                
-                let actor = spawn system "word-counter-manager" (Manager.create (fun _ -> "All Done!") )
+                let actor = spawn system "word-counter-manager" (Manager.create None )
                 registry.Register<Manager>(actor) 
             ) |> ignore
     let addServices (services: IServiceCollection) =

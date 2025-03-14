@@ -26,7 +26,7 @@ type DoAThing_Spec(output: ITestOutputHelper) as this =
         task {            
             let guid2 = Guid.NewGuid()
             let guid = Guid.NewGuid()
-            let manager = spawn this.Sys "manager" (Manager.create (fun item -> $"All Done with {item}"))
+            let manager = spawn this.Sys "manager" (Manager.create (Some (fun item -> $"All Done with {item}")))
             manager.Tell(Start guid )
             do! System.Threading.Tasks.Task.Delay(TimeSpan.FromSeconds(0.1))
             manager.Tell(Start guid2)

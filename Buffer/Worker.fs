@@ -2,9 +2,7 @@ namespace Buffer
 
 open System
 open System.Buffers
-open System.Collections.Generic
 open System.IO
-open System.Linq
 open System.Text.Json
 open System.Threading
 open System.Threading.Tasks
@@ -39,14 +37,14 @@ type Worker(connectionFactory: ConnectionFactory, logger: ILogger<Worker>, manag
                 return channel
        }
     
-    let readJson ( input : inref<ReadOnlyMemory<byte>>) =
-            let arr = ArrayPool<byte>.Shared.Rent(input.Length)                        
+    let readJson (input : inref<ReadOnlyMemory<byte>>) =
+            let arr = ArrayPool<byte>.Shared.Rent(input.Length)
             try 
                 do input.CopyTo(arr)
                 use body = new MemoryStream(arr, 0, input.Length)
                 let envelope = JsonSerializer.Deserialize<QueueEnvelope<string>>(body)
-                envelope                
-            finally                            
+                envelope
+            finally
                 ArrayPool<byte>.Shared.Return(arr)
     
     let stop (ct: CancellationToken)=
@@ -65,19 +63,15 @@ type Worker(connectionFactory: ConnectionFactory, logger: ILogger<Worker>, manag
                         let body = ea.Body
                         let envelope = readJson(&body)
                         logger.LogInformation("Received {0}: {0}", envelope.id, envelope.message)
-                        let! response = manager.ActorRef.Ask(ManagerMessage.Start envelope.id)
-                        logger.LogInformation("{0}", response)
-                        do! chan.BasicAckAsync(ea.DeliveryTag, false)                        
+                        do manager.ActorRef.Tell(ManagerMessage.Start envelope.id) 
+                        do! chan.BasicAckAsync(ea.DeliveryTag, false)
                         })
-            return! chan.BasicConsumeAsync(queue = "hello",  autoAck = false, consumer = consumer)            
+            return! chan.BasicConsumeAsync(queue = "hello",  autoAck = false, consumer = consumer)
         }:> Task
 
-    override this.ExecuteAsync(ct: CancellationToken) =        
+    override this.ExecuteAsync(ct: CancellationToken) =
         listen ct
         
     override _.StopAsync (ct: CancellationToken) =
         base.StopAsync(ct).ContinueWith(fun _ -> stop ct)
-         
-    
-        
-    
+ 

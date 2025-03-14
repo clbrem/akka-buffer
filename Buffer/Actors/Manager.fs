@@ -23,8 +23,11 @@ module Manager =
             a
     let (|InProgress|_|) (active: Map<Guid, IActorRef>) id =
         Map.tryFind id active
-        
-    let create (onFinished: Guid -> 'msg) =
+    let maybeTell (actor: IActorRef) maybeMap msg=
+        match maybeMap with
+        | Some mapping -> actor.Tell(mapping msg)
+        | None -> ()
+    let create (onFinished: (Guid -> 'msg) option) =
         fun (mailbox: Actor<ManagerMessage>) ->
             let logger = mailbox.Context.GetLogger()
             let rec loop ( active: Map<Guid, IActorRef> ) =
@@ -40,7 +43,7 @@ module Manager =
                         child.Tell(DoAThing (Finished id))                        
                         return! loop (Map.add id (mailbox.Sender()) active)                        
                     | Finished (id & InProgress active sender) ->
-                        sender.Tell(onFinished id)
+                        maybeTell sender onFinished id  
                         logger.Info("Finishing task {0}", id)
                         mailbox.Unstash()
                         return! loop (active.Remove id)
