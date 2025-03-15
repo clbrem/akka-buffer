@@ -1,7 +1,7 @@
 namespace Buffer.Actors
+open Buffer.Timeout
 open System
 open Akka.Event
-open Buffer.Timeout
 open Akka.FSharp
 open Akka.Actor
 
@@ -17,8 +17,9 @@ module DoAThing =
     let create timespan =
         fun (mailbox: Actor<DoAThing>) ->
            let logger = mailbox.Context.GetLogger()           
-           let rec loop  =
-               function
+           let rec loop message=
+               mailbox.Context.OnTimeout(Stop, timeout=TimeSpan.FromSeconds(30.0))
+               match message with
                // We're live! waiting on a thing to be done!
                | Some (sender: IActorRef, msg) -> 
                    actor {                       
@@ -35,7 +36,7 @@ module DoAThing =
                            return! loop None
                        | Stop ->
                            logger.Warning("Received stop but not done with {0}", [|msg|])
-                           mailbox.Context.Stop(mailbox.Self)
+                           mailbox.Unhandled(Stop)
                    }
                // Just chillaxin' waiting for a new thing to do
                | None -> 
@@ -49,7 +50,8 @@ module DoAThing =
                        | ThingIsDone -> 
                            mailbox.Unhandled(ThingIsDone)
                            return! loop None
-                       | Stop ->                           
+                       | Stop ->
+                           logger.Info("Goodbye Cruel World")
                            mailbox.Context.Stop(mailbox.Self)
                    }
            loop None 

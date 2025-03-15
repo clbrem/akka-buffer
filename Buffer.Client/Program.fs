@@ -31,7 +31,8 @@ let webApp =
     choose [
         GET >=>
             choose [
-                routef "/send/%s" Handlers.SendHandler >=> text "Message sent" |> ok
+                routef "/send/%s" Handlers.sendHandler >=> text "Message sent" |> ok
+                routef "/default/%s" Handlers.sendDefaultHandler >=> text "Default message sent" |> ok
                 RequestErrors.NOT_FOUND "Not Found"
             ]
         setStatusCode 404 >=> text "Not Found" ]

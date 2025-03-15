@@ -15,7 +15,6 @@ open RabbitMQ.Client
 open RabbitMQ.Client.Events
 open Buffer.Message
 
-
 type Worker(connectionFactory: ConnectionFactory, logger: ILogger<Worker>, manager: IRequiredActor<Manager>) =
     inherit BackgroundService() 
     let mutable _connection: IConnection option = None
@@ -50,7 +49,7 @@ type Worker(connectionFactory: ConnectionFactory, logger: ILogger<Worker>, manag
     let stop (ct: CancellationToken)=
         task {
             match _connection with
-            | Some conn -> do! conn.CloseAsync(ct)            
+            | Some conn -> do! conn.CloseAsync(ct)
             | _ -> ()            
         } :> Task
     let listen(ct: CancellationToken) =
