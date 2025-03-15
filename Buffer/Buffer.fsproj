@@ -10,6 +10,7 @@
         <Compile Include="TimeoutCore.fs" />
         <Compile Include="Actors\DoAThing.fs" />
         <Compile Include="Actors\Manager.fs" />
+        <Compile Include="Actors\Exchanger.fs" />
         <Compile Include="Worker.fs"/>
         <Compile Include="Program.fs"/>
     </ItemGroup>

@@ -11,7 +11,7 @@ type DoAThing =
     | Stop
 
 module DoAThing =
-    let nameOfGuid guid = $"doAThing-{guid.ToString()}" 
+    let nameOfGuid guid = $"doAThing-{guid}" 
     let create timespan =
         fun (mailbox: Actor<DoAThing>) ->
            let logger = mailbox.Context.GetLogger()           
