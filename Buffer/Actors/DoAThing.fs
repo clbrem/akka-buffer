@@ -9,8 +9,6 @@ type DoAThing =
     | DoAThing of obj
     | ThingIsDone
     | Stop
-    
-    
 
 module DoAThing =
     let nameOfGuid guid = $"doAThing-{guid.ToString()}" 
